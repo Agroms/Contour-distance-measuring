@@ -1,0 +1,35 @@
+# Measure distance between two contours in an image
+
+from scipy.spatial import distance as dist
+import cv2
+import numpy as np
+import matplotlib as mat
+
+image = cv2.imread('TwoMarkers.jpg')
+gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+ret, thresh = cv2.threshold(gray, 127 , 255, 0)
+
+im2, contours, hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+
+for c in contours:
+	# if the contour is not sufficient large, or to small, ignore it
+	if cv2.contourArea(c) > 2000:
+		continue
+	elif cv2.contourArea(c) < 100:
+		continue 
+    
+  M = cv2.moments(c)
+	cX = int(M['m10'] /M['m00'])
+	cY = int(M['m01'] /M['m00'])
+	contourMidpoint = np.vstack([(cX, cY)])
+ 
+	cv2.drawContours(image, [c], -1, (0,255,0), 3)
+
+# How can I meassure the distance between the two meassured midpoints?
+# This apporach doesent work, and I dont know how to get the stacket values seperated and then meassure the distance between them.
+
+#D = dist.euclidean(contourMidpoint[1], contourMidpoint[2])
+#print[D]
+
+cv2.imshow('image', image)
+cv2.waitKey(0)
