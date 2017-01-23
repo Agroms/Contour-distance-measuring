@@ -33,3 +33,5 @@ for c in contours:
 
 cv2.imshow('image', image)
 cv2.waitKey(0)
+
+# Any help is very much appriciated 
